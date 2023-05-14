@@ -1,5 +1,4 @@
 ﻿using System;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace DispatchR
 {
@@ -91,6 +90,11 @@ namespace DispatchR
         {
             return new DispatchDateTime(minute);
         }
+
+        /// <summary>
+        /// Constructor the restrict inheritance.
+        /// </summary>
+        internal DispatchTime() { }
     }
 
     public class DispatchDateTime : DispatchTime

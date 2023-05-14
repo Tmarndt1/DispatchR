@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Dispatchr\DispatchR.csproj" />
+    <ProjectReference Include="..\DispatchR\DispatchR.csproj" />
   </ItemGroup>
 
 </Project>
