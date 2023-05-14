@@ -166,7 +166,7 @@ namespace DispatchR.Test
 
             Task.Run(() =>
             {
-                Thread.Sleep(TimeSpan.FromSeconds(3));
+                Thread.Sleep(TimeSpan.FromMilliseconds(100));
 
                 cancellationTokenSource.Cancel();
             });

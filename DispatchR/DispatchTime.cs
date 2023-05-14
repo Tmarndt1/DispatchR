@@ -16,7 +16,7 @@ namespace DispatchR
         /// Designates the Dispatchee to execute at the given frequency
         /// </summary>
         /// <param name="frequency">The frequency to execute the Workflow</param>
-        /// <returns>An instance of WorkflowFrequency</returns>
+        /// <returns>An instance of DispatchFrequency</returns>
         public static DispatchFrequency AtFrequency(TimeSpan frequency)
         {
             return new DispatchFrequency(frequency);
@@ -28,7 +28,7 @@ namespace DispatchR
         /// <param name="day">The day of the month the Workflow should be executed.</param>
         /// <param name="hour">The hour of the day the Workflow should be executed.</param>
         /// <param name="minute">The minute of the hour the Workflow should be executed.</param>
-        /// <returns>A new instance of WorkflowTime.</returns>
+        /// <returns>A new instance of DispatchDateTime.</returns>
         public static DispatchDateTime AtDay(int day, int hour, int minute)
         {
             return new DispatchDateTime(day, hour, minute);
@@ -39,7 +39,7 @@ namespace DispatchR
         /// </summary>
         /// <param name="day">The day of the month the Workflow should be executed.</param>
         /// <param name="hour">The hour of the day the Workflow should be executed.</param>
-        /// <returns>A new instance of WorkflowTime.</returns>
+        /// <returns>A new instance of DispatchDateTime.</returns>
         /// <remarks>
         /// Will execute at the beginning of the provided day and hour.
         /// </remarks>
@@ -52,7 +52,7 @@ namespace DispatchR
         /// Designates the Dispatchee to execute at the given day, hour 0, and minute 0.
         /// </summary>
         /// <param name="day">The day of the month the Workflow should be executed.</param>
-        /// <returns>A new instance of WorkflowTime.</returns>
+        /// <returns>A new instance of DispatchDateTime.</returns>
         /// <remarks>
         /// Will execute at midnight on the given day.
         /// </remarks>
@@ -75,7 +75,7 @@ namespace DispatchR
         /// Designates the Dispatchee to execute at the given hour and minute 0.
         /// </summary>
         /// <param name="hour">The hour of the day the Workflow should be executed.</param>
-        /// <returns>A new instance of WorkflowTime.</returns>
+        /// <returns>A new instance of DispatchDateTime.</returns>
         public static DispatchDateTime AtHour(int hour)
         {
             return new DispatchDateTime(hour, 0);
@@ -85,7 +85,7 @@ namespace DispatchR
         /// Designates the Dispatchee to execute at the given minute.
         /// </summary>
         /// <param name="minute">The minute of the hour the Workflow should be executed.</param>
-        /// <returns>A new instance of WorkflowTime.</returns>
+        /// <returns>A new instance of DispatchDateTime.</returns>
         public static DispatchDateTime AtMinute(int minute)
         {
             return new DispatchDateTime(minute);
@@ -109,9 +109,9 @@ namespace DispatchR
             get => _day;
             private set
             {
-                if (value < 1) throw new InvalidOperationException("A month cannot be less than 1");
+                if (value < 1) throw new ArgumentOutOfRangeException("A month cannot be less than 1");
 
-                if (value > 31) throw new InvalidOperationException("A month cannot be greater than 12");
+                if (value > 31) throw new ArgumentOutOfRangeException("A month cannot be greater than 12");
 
                 _day = value;
             }
@@ -127,9 +127,9 @@ namespace DispatchR
             get => _hour;
             private set
             {
-                if (value < 0) throw new InvalidOperationException("A hour cannot be less than 0");
+                if (value < 0) throw new ArgumentOutOfRangeException("A hour cannot be less than 0");
 
-                if (value > 23) throw new InvalidOperationException("A hour cannot be greater than 23");
+                if (value > 23) throw new ArgumentOutOfRangeException("A hour cannot be greater than 23");
 
                 _hour = value;
             }
@@ -145,9 +145,9 @@ namespace DispatchR
             get => _minute;
             private set
             {
-                if (value < 0) throw new InvalidOperationException("A minute cannot be less than 0");
+                if (value < 0) throw new ArgumentOutOfRangeException("A minute cannot be less than 0");
 
-                if (value > 59) throw new InvalidOperationException("A minute cannot be greater than 59");
+                if (value > 59) throw new ArgumentOutOfRangeException("A minute cannot be greater than 59");
 
                 _minute = value;
             }

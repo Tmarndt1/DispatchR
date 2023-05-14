@@ -21,6 +21,26 @@ namespace DispatchR
         /// </summary>
         private bool _isDone = true;
 
+        private object _lock = new object();
+
+        internal bool IsDone
+        {
+            get
+            {
+                lock (_lock)
+                {
+                    return _isDone;
+                }
+            }
+            set
+            {
+                lock (_lock)
+                {
+                    _isDone = value;
+                }
+            }
+        }
+
         /// <summary>
         /// Executes the Dispatchee's business logic.
         /// </summary>
@@ -46,7 +66,7 @@ namespace DispatchR
 
         internal async Task InvokeAsync(CancellationToken token = default)
         {
-            _isDone = false;
+            IsDone = false;
 
             try
             {
@@ -66,14 +86,12 @@ namespace DispatchR
                 // Continue
             }
 
-            _isDone = true;
+            IsDone = true;
         }
-
-        internal bool IsDone() => _isDone;
 
         internal bool ShouldExecute()
         {
-            if (!IsDone()) return false;
+            if (!IsDone) return false;
 
             if (_dispatchDateTime != null)
             {
