@@ -158,7 +158,7 @@ namespace DispatchR.Test
                 ++count;
 
                 return Task.CompletedTask;
-            }, DispatchTime.AtFrequency(TimeSpan.FromMilliseconds(1)));
+            }, DispatchTime.AtFrequency(TimeSpan.FromMilliseconds(10)));
 
             Dispatcher dispatcher = new Dispatcher(dispatchee);
 
@@ -166,7 +166,7 @@ namespace DispatchR.Test
 
             Task.Run(() =>
             {
-                Thread.Sleep(TimeSpan.FromMilliseconds(100));
+                Thread.Sleep(TimeSpan.FromSeconds(1));
 
                 cancellationTokenSource.Cancel();
             });
