@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DispatchR", "Dispatchr\DispatchR.csproj", "{BC69B7BE-3517-46C0-8D73-5C275F71895B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DispatchR", "DispatchR\DispatchR.csproj", "{BC69B7BE-3517-46C0-8D73-5C275F71895B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DispatchR.Test", "Dispatchr.Test\DispatchR.Test.csproj", "{CDF2EEF3-E2E1-4AFC-B3FE-C0C60D46E2C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DispatchR.Test", "DispatchR.Test\DispatchR.Test.csproj", "{CDF2EEF3-E2E1-4AFC-B3FE-C0C60D46E2C1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DispatchR.Benchmark", "DispatchR.Benchmark\DispatchR.Benchmark.csproj", "{45143947-F4CB-4124-ACCC-7FC5EC9D5B24}"
 EndProject
