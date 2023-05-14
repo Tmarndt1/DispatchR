@@ -57,7 +57,7 @@ namespace DispatchR
             }, token);
         }
 
-        private void AddTo<T>(T dispatchee)
+        protected void AddTo<T>(T dispatchee)
             where T : Dispatchee
         {
             lock (_lock)
@@ -79,7 +79,7 @@ namespace DispatchR
             throw new InvalidOperationException("DispatchTime must be defined");
         }
 
-        private void Dispatch(List<Dispatchee> dispatchees, CancellationToken token = default)
+        protected void Dispatch(List<Dispatchee> dispatchees, CancellationToken token = default)
         {
             if (dispatchees == null) return;
 
