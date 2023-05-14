@@ -14,13 +14,13 @@ namespace DispatchR
         private DispatchDateTime? _dispatchDateTime;
 
         /// <summary>
-        /// Defines whether or not the Dispatchee has completed/faulted/cancelled the task.
+        /// Defines whether or not the Dispatchee has completed/faulted/canceled the task.
         /// </summary>
         private bool _isDone = true;
 
         private Func<CancellationToken, Task> _func;
 
-        public Dispatchee(Func<CancellationToken, Task> func, DispatchTime dispatchTime)
+        public Dispatchee(Func<CancellationToken, Task> func, IDispatchTime dispatchTime)
         {
             _func = func;
 

@@ -30,13 +30,13 @@ namespace DispatchR.Test
                     set.Invoke(nameof(MockDispatchee2));
 
                     return Task.CompletedTask;
-                }, DispatchTime.AtMinute(1)),
+                }, DispatchTimeFactory.AtMinute(1)),
                 new MockDispatchee1((token) =>
                 {
                     set.Invoke(nameof(MockDispatchee1));
 
                     return Task.CompletedTask;
-                }, DispatchTime.AtMinute(1))
+                }, DispatchTimeFactory.AtMinute(1))
             });
 
             // Act
@@ -59,7 +59,7 @@ namespace DispatchR.Test
                 ran = true;
 
                 return Task.CompletedTask;
-            }, DispatchTime.AtDay(dateTime.Day, dateTime.Hour, dateTime.Minute));
+            }, DispatchTimeFactory.AtDay(dateTime.Day, dateTime.Hour, dateTime.Minute));
 
             Dispatcher dispatcher = new Dispatcher(dispatchee);
 
@@ -92,7 +92,7 @@ namespace DispatchR.Test
                 ran = true;
 
                 return Task.CompletedTask;
-            }, DispatchTime.AtMinute(dateTime.Minute));
+            }, DispatchTimeFactory.AtMinute(dateTime.Minute));
 
             Dispatcher dispatcher = new Dispatcher(dispatchee);
 
@@ -125,7 +125,7 @@ namespace DispatchR.Test
                 ran = true;
 
                 return Task.CompletedTask;
-            }, DispatchTime.AtHour(dateTime.Hour, dateTime.Minute));
+            }, DispatchTimeFactory.AtHour(dateTime.Hour, dateTime.Minute));
 
             Dispatcher dispatcher = new Dispatcher(dispatchee);
 
@@ -158,7 +158,7 @@ namespace DispatchR.Test
                 ++count;
 
                 return Task.CompletedTask;
-            }, DispatchTime.AtFrequency(TimeSpan.FromMilliseconds(1)));
+            }, DispatchTimeFactory.AtFrequency(TimeSpan.FromMilliseconds(1)));
 
             Dispatcher dispatcher = new Dispatcher(dispatchee);
 
