@@ -52,7 +52,7 @@ namespace DispatchR
         /// Constructor that requires the DispatchTime.
         /// </summary>
         /// <param name="dispatchTime">The DispatchTime.</param>
-        public Dispatchee(DispatchTime dispatchTime)
+        protected Dispatchee(DispatchTime dispatchTime)
         {
             if (dispatchTime is DispatchDateTime dispatchDateTime) 
             {
