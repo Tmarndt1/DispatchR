@@ -9,19 +9,19 @@ namespace DispatchR
         /// <summary>
         /// The DispatchFrequency which designates when the Dispatchee should be executed.
         /// </summary>
-        private DispatchFrequency? _dispatchFrequency;
+        private readonly DispatchFrequency? _dispatchFrequency;
 
         /// <summary>
         /// The DispatchDateTime which designates when the Dispatchee should be executed.
         /// </summary>
-        private DispatchDateTime? _dispatchDateTime;
+        private readonly DispatchDateTime? _dispatchDateTime;
 
         /// <summary>
         /// Defines whether or not the Dispatchee has completed/faulted/cancelled the task.
         /// </summary>
         private bool _isDone = true;
 
-        private object _lock = new object();
+        private readonly object _lock = new object();
 
         internal bool IsDone
         {

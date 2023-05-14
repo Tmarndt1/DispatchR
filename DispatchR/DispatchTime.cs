@@ -109,9 +109,9 @@ namespace DispatchR
             get => _day;
             private set
             {
-                if (value < 1) throw new ArgumentOutOfRangeException("A month cannot be less than 1");
+                if (value < 1) throw new ArgumentOutOfRangeException("A day cannot be less than 1");
 
-                if (value > 31) throw new ArgumentOutOfRangeException("A month cannot be greater than 12");
+                if (value > 31) throw new ArgumentOutOfRangeException("A day cannot be greater than 31");
 
                 _day = value;
             }
