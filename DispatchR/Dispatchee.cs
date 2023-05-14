@@ -4,6 +4,14 @@ using System.Threading.Tasks;
 
 namespace DispatchR
 {
+    /// <summary>
+    /// The Dispatchee abstract class provides a base for defining classes that encapsulate business logic 
+    /// to be executed at a certain frequency or specific time. It provides properties and methods for defining 
+    /// the dispatch frequency and time, executing the business logic asynchronously, and checking if the task 
+    /// should be executed based on the dispatch time. 
+    /// The class is intended to be subclassed to define specific business logic, 
+    /// and is designed to be used in conjunction with a task scheduler or similar mechanism for executing scheduled tasks.
+    /// </summary>
     public abstract class Dispatchee
     {
         /// <summary>

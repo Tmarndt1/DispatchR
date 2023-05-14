@@ -6,6 +6,14 @@ using System.Threading.Tasks;
 
 namespace DispatchR
 {
+    /// <summary>
+    /// The Dispatcher class provides a mechanism for managing a collection of Dispatchee objects that encapsulate business logic 
+    /// to be executed at a certain frequency or specific time. 
+    /// The class allows adding and removing Dispatchee objects, dispatching tasks asynchronously, and running tasks in a background thread. 
+    /// The class is designed to work with a task scheduler or similar mechanism for executing scheduled tasks, 
+    /// and provides methods for customizing the order of execution of the dispatchees based on a DispatchOrderAttribute. 
+    /// The class is thread-safe, and can be used to manage a collection of dispatchees in a multi-threaded environment.
+    /// </summary>
     public class Dispatcher
     {
         private List<Dispatchee> _dispatchees = new List<Dispatchee>();
