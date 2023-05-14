@@ -93,7 +93,7 @@ namespace DispatchR
 
                     if (!dispatchee.ShouldExecute()) continue;
 
-                    _ = dispatchee.ExecuteAsync(token);
+                    _ = dispatchee.InvokeAsync(token);
                 }
             }
         }

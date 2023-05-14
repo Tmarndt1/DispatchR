@@ -1,5 +1,4 @@
 ﻿using BenchmarkDotNet.Attributes;
-using System.Runtime.InteropServices;
 
 namespace DispatchR.Benchmark
 {
@@ -62,10 +61,14 @@ namespace DispatchR.Benchmark
     [DispatchOrder(1)]
     public class FakeDispatchee : Dispatchee
     {
-        public FakeDispatchee(Func<CancellationToken, Task> func, DispatchTime dispatchTime) : base(func, dispatchTime)
-        {
+        private readonly Func<CancellationToken, Task> _func;
 
+        public FakeDispatchee(Func<CancellationToken, Task> func, DispatchTime dispatchTime) : base(dispatchTime)
+        {
+            _func = func;
         }
+
+        public override Task ExecuteAsync(CancellationToken token = default) => _func(token);
     }
 
     public class FakeDispatcher : Dispatcher

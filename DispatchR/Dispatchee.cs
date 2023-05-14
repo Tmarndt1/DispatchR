@@ -7,10 +7,13 @@ namespace DispatchR
     public abstract class Dispatchee
     {
         /// <summary>
-        /// The DispatchTime which designates when the Dispatchee should be executed.
+        /// The DispatchFrequency which designates when the Dispatchee should be executed.
         /// </summary>
         private DispatchFrequency? _dispatchFrequency;
 
+        /// <summary>
+        /// The DispatchDateTime which designates when the Dispatchee should be executed.
+        /// </summary>
         private DispatchDateTime? _dispatchDateTime;
 
         /// <summary>
@@ -18,12 +21,19 @@ namespace DispatchR
         /// </summary>
         private bool _isDone = true;
 
-        private Func<CancellationToken, Task> _func;
+        /// <summary>
+        /// Executes the Dispatchee's business logic.
+        /// </summary>
+        /// <param name="token">The CancellationToken to cancel the execution.</param>
+        /// <returns>A Task.</returns>
+        public abstract Task ExecuteAsync(CancellationToken token = default);
 
-        public Dispatchee(Func<CancellationToken, Task> func, DispatchTime dispatchTime)
+        /// <summary>
+        /// Constructor that requires the DispatchTime.
+        /// </summary>
+        /// <param name="dispatchTime">The DispatchTime.</param>
+        public Dispatchee(DispatchTime dispatchTime)
         {
-            _func = func;
-
             if (dispatchTime is DispatchDateTime dispatchDateTime) 
             {
                 _dispatchDateTime = dispatchDateTime;
@@ -34,7 +44,7 @@ namespace DispatchR
             }
         }
 
-        internal async Task ExecuteAsync(CancellationToken token = default)
+        internal async Task InvokeAsync(CancellationToken token = default)
         {
             _isDone = false;
 
@@ -44,11 +54,11 @@ namespace DispatchR
                 {
                     await Task.Delay(_dispatchFrequency, token);
 
-                    await _func.Invoke(token);
+                    await ExecuteAsync(token);
                 }
                 else
                 {
-                    await _func.Invoke(token);
+                    await ExecuteAsync(token);
                 }
             }
             catch
