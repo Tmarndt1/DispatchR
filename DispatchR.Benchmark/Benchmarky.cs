@@ -2,10 +2,10 @@
 
 namespace DispatchR.Benchmark
 {
-
+    [MemoryDiagnoser]
     public class Benchmarky
     {
-        private IEnumerable<Dispatchee> _dispatchees = new Dispatchee[]
+        private readonly IEnumerable<Dispatchee> _dispatchees = new Dispatchee[]
         {
             new FakeDispatchee(token =>
             {
@@ -29,7 +29,7 @@ namespace DispatchR.Benchmark
             }, DispatchTime.AtFrequency(TimeSpan.FromMilliseconds(5)))
         };
 
-        private FakeDispatcher _dispatcher;
+        private readonly FakeDispatcher _dispatcher;
 
         public Benchmarky()
         {

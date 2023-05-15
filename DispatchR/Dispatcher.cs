@@ -20,25 +20,54 @@ namespace DispatchR
 
         private readonly object _lock = new object();
 
+        /// <summary>
+        /// Constructs a Dispatcher object with the specified Dispatchee.
+        /// </summary>
+        /// <param name="dispatchee">The Dispatchee object to be added and processed by the Dispatcher.</param>
         public Dispatcher(Dispatchee dispatchee)
         {
             AddTo(dispatchee);
         }
 
+        /// <summary>
+        /// Constructs a Dispatcher object with the specified collection of Dispatchees.
+        /// </summary>
+        /// <param name="dispatchee">The Dispatchee collection to be added and processed by the Dispatcher.</param>
         public Dispatcher(IEnumerable<Dispatchee> dispatchees)
         {
             foreach (var dispatchee in dispatchees)
             {
                 AddTo(dispatchee);
             }
+
+            lock (_lock)
+            {
+                _dispatchees = _dispatchees.SortByOrderAttr().ToList();
+            }
         }
 
+        /// <summary>
+        /// Adds a Dispatchee to be processed.
+        /// </summary>
+        /// <typeparam name="T">The derived type of the Dispatchee</typeparam>
+        /// <param name="dispatchee">The Dispatchee to be addded.</param>
         public void Add<T>(T dispatchee)
             where T : Dispatchee
         {
             AddTo(dispatchee);
+
+            if (!typeof(T).IsDefined(typeof(DispatchOrderAttribute), true)) return;
+
+            lock (_lock)
+            {
+                _dispatchees = _dispatchees.SortByOrderAttr().ToList();
+            }
         }
 
+        /// <summary>
+        /// Removes a Dispatchee from the Dispatcher.
+        /// </summary>
+        /// <param name="dispatchee">The Dispatchee to be removed.</param>
         public void Remove(Dispatchee dispatchee)
         {
             lock (_lock)
@@ -54,6 +83,11 @@ namespace DispatchR
                             .ToArray();
         }
 
+        /// <summary>
+        /// Runs the Dispatcher indefinitely until the CancellationTokenSource is cancelled.
+        /// </summary>
+        /// <param name="token">The CancellationToken to stop the Dispatcher's execution.</param>
+        /// <returns>A long running Task.</returns>
         public Task RunAsync(CancellationToken token = default)
         {
             return Task.Run(() =>
@@ -70,14 +104,7 @@ namespace DispatchR
         {
             lock (_lock)
             {
-                if (_dispatchees == null) _dispatchees = new List<Dispatchee>();
-
                 if (_dispatchees.Contains(dispatchee)) throw new InvalidOperationException("Duplicate dispatchee found.");
-
-                if (typeof(T).IsDefined(typeof(DispatchOrderAttribute), true))
-                {
-                    _dispatchees = _dispatchees.SortByOrderAttr().ToList();
-                }
 
                 _dispatchees.Add(dispatchee);
 
@@ -89,8 +116,6 @@ namespace DispatchR
 
         protected void Dispatch(List<Dispatchee> dispatchees, CancellationToken token = default)
         {
-            if (dispatchees == null) return;
-
             lock (_lock)
             {
                 for (int i = 0; i < dispatchees.Count; i++)
