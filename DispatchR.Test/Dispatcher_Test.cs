@@ -149,8 +149,6 @@ namespace DispatchR.Test
         public void At_Frequency_Success()
         {
             // Arrange
-            DateTime dateTime = DateTime.Now;
-
             short count = 0;
 
             MockDispatchee1 dispatchee = new MockDispatchee1(token =>
