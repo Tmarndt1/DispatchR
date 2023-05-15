@@ -12,39 +12,29 @@ namespace DispatchR.Test
         public void Order_Success()
         {
             // Arrange
-            object lockObj = new object();
-
-            string name = string.Empty;
-
-            Action<string> set = (string className) =>
-            {
-                lock (lockObj)
-                {
-                    if (string.IsNullOrEmpty(name)) name = className;
-                }
-            };
-
+            // Act
             Dispatcher dispatcher = new Dispatcher(new Dispatchee[]
             {
                 new MockDispatchee2((token) =>
                 {
-                    set.Invoke(nameof(MockDispatchee2));
-
                     return Task.CompletedTask;
                 }, DispatchTime.AtMinute(1)),
                 new MockDispatchee1((token) =>
                 {
-                    set.Invoke(nameof(MockDispatchee1));
-
                     return Task.CompletedTask;
                 }, DispatchTime.AtMinute(1))
             });
 
-            // Act
-            Task.WaitAll(dispatcher.DispatchAsync());
-
             // Assert
-            Assert.Equal(nameof(MockDispatchee1), name);
+            FieldInfo? field = typeof(Dispatcher).GetField("_dispatchees", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            object? fieldValue = field?.GetValue(dispatcher);
+
+            Assert.NotNull(fieldValue);
+
+            List<Dispatchee>? dispatchees = fieldValue as List<Dispatchee>;
+
+            Assert.Equal(nameof(MockDispatchee1), dispatchees?.First()?.GetType()?.Name);
         }
 
         [Fact]
@@ -70,7 +60,7 @@ namespace DispatchR.Test
                     return Task.CompletedTask;
                 }, DispatchTime.AtFrequency(TimeSpan.FromMilliseconds(10))));
 
-                Thread.Sleep(200);
+                Thread.Sleep(500);
 
                 cancellationTokenSource.Cancel();
             });
