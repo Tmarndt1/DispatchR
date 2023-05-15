@@ -12,6 +12,7 @@
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <Authors>Travis Arndt</Authors>
     <Description>DispatchR is a lightweight and performant C# .NET library that dispatches asynchronous functions in order at a specified frequency or date time.</Description>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
