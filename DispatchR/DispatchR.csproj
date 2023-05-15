@@ -10,6 +10,8 @@
     <RepositoryUrl>https://github.com/Tmarndt1/DispatchR</RepositoryUrl>
     <PackageTags>Dispatch;Dispatcher;DispatchR</PackageTags>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <Authors>Travis Arndt</Authors>
+    <Description>A simple light weight C# dispatching library that executes asynchronous tasks at a specified date time or a frequency.</Description>
   </PropertyGroup>
 
   <ItemGroup>
