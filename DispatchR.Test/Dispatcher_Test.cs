@@ -158,7 +158,7 @@ namespace DispatchR.Test
                 ++count;
 
                 return Task.CompletedTask;
-            }, DispatchTime.AtFrequency(TimeSpan.FromMilliseconds(10)));
+            }, DispatchTime.AtFrequency(TimeSpan.FromMilliseconds(1)));
 
             Dispatcher dispatcher = new Dispatcher(dispatchee);
 
