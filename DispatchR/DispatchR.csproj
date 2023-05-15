@@ -11,7 +11,7 @@
     <PackageTags>Dispatch;Dispatcher;DispatchR</PackageTags>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <Authors>Travis Arndt</Authors>
-    <Description>A simple light weight C# dispatching library that executes asynchronous tasks at a specified date time or a frequency.</Description>
+    <Description>DispatchR is a lightweight and performant C# .NET library that dispatches asynchronous functions in order at a specified frequency or date time.</Description>
   </PropertyGroup>
 
   <ItemGroup>
