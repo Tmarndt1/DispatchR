@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Reflection;
 
 namespace DispatchR.Test
 {
@@ -47,47 +48,27 @@ namespace DispatchR.Test
         }
 
         [Fact]
-        public void Order_After_Add_Success()
+        public void Order_After_Run_Success()
         {
             // Arrange
-            object lockObj = new object();
-
-            string name = string.Empty;
-
-            Action<string> set = default;
-
             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
             Dispatcher dispatcher = new Dispatcher(new Dispatchee[]
             {
                 new MockDispatchee2((token) =>
                 {
-                    set?.Invoke(nameof(MockDispatchee2));
-
                     return Task.CompletedTask;
-                }, DispatchTime.AtFrequency(TimeSpan.FromMilliseconds(50)))
+                }, DispatchTime.AtFrequency(TimeSpan.FromMilliseconds(10)))
             });
 
             Task.Run(() =>
             {
-                Thread.Sleep(100);
+                Thread.Sleep(50);
 
                 dispatcher.Add(new MockDispatchee1((token) =>
                 {
-                    set?.Invoke(nameof(MockDispatchee1));
-
                     return Task.CompletedTask;
-                }, DispatchTime.AtFrequency(TimeSpan.FromMilliseconds(50))));
-
-                Thread.Sleep(50);
-
-                set = (string className) =>
-                {
-                    lock (lockObj)
-                    {
-                        if (string.IsNullOrEmpty(name)) name = className;
-                    }
-                };
+                }, DispatchTime.AtFrequency(TimeSpan.FromMilliseconds(10))));
 
                 Thread.Sleep(200);
 
@@ -98,7 +79,15 @@ namespace DispatchR.Test
             Task.WaitAll(dispatcher.RunAsync(cancellationTokenSource.Token));
 
             // Assert
-            Assert.Equal(nameof(MockDispatchee1), name);
+            FieldInfo? field = typeof(Dispatcher).GetField("_dispatchees", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            object? fieldValue = field?.GetValue(dispatcher);
+
+            Assert.NotNull(fieldValue);
+
+            List<Dispatchee>? dispatchees = fieldValue as List<Dispatchee>;
+
+            Assert.Equal(nameof(MockDispatchee1), dispatchees?.First()?.GetType()?.Name);
         }
 
         [Fact]

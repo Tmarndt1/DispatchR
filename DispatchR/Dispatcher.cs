@@ -26,7 +26,7 @@ namespace DispatchR
         /// <param name="dispatchee">The Dispatchee object to be added and processed by the Dispatcher.</param>
         public Dispatcher(Dispatchee dispatchee)
         {
-            AddTo(dispatchee);
+            _dispatchees.Add(dispatchee);
         }
 
         /// <summary>
@@ -35,15 +35,7 @@ namespace DispatchR
         /// <param name="dispatchee">The Dispatchee collection to be added and processed by the Dispatcher.</param>
         public Dispatcher(IEnumerable<Dispatchee> dispatchees)
         {
-            foreach (var dispatchee in dispatchees)
-            {
-                AddTo(dispatchee);
-            }
-
-            lock (_lock)
-            {
-                _dispatchees = _dispatchees.SortByOrderAttr().ToList();
-            }
+            _dispatchees = new List<Dispatchee>(dispatchees.SortByOrderAttr());
         }
 
         /// <summary>
@@ -54,13 +46,16 @@ namespace DispatchR
         public void Add<T>(T dispatchee)
             where T : Dispatchee
         {
-            AddTo(dispatchee);
-
-            if (!typeof(T).IsDefined(typeof(DispatchOrderAttribute), true)) return;
-
             lock (_lock)
             {
-                _dispatchees = _dispatchees.SortByOrderAttr().ToList();
+                if (_dispatchees.Contains(dispatchee)) throw new InvalidOperationException("Duplicate dispatchee found.");
+
+                _dispatchees.Add(dispatchee);
+
+                if (typeof(T).IsDefined(typeof(DispatchOrderAttribute), true))
+                {
+                    _dispatchees = new List<Dispatchee>(_dispatchees.SortByOrderAttr());
+                }
             }
         }
 
@@ -97,21 +92,6 @@ namespace DispatchR
                     Dispatch(_dispatchees, token);
                 }
             }, token);
-        }
-
-        protected void AddTo<T>(T dispatchee)
-            where T : Dispatchee
-        {
-            lock (_lock)
-            {
-                if (_dispatchees.Contains(dispatchee)) throw new InvalidOperationException("Duplicate dispatchee found.");
-
-                _dispatchees.Add(dispatchee);
-
-                return;
-            }
-
-            throw new InvalidOperationException("DispatchTime must be defined");
         }
 
         protected void Dispatch(List<Dispatchee> dispatchees, CancellationToken token = default)

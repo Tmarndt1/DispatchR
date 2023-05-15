@@ -17,7 +17,7 @@ namespace DispatchR
         /// <summary>
         /// The DispatchFrequency which designates when the Dispatchee should be executed.
         /// </summary>
-        private readonly DispatchFrequency? _dispatchFrequency;
+        protected readonly DispatchFrequency? _dispatchFrequency;
 
         /// <summary>
         /// The DispatchDateTime which designates when the Dispatchee should be executed.
