@@ -18,7 +18,8 @@ namespace DispatchR
     {
         private List<Dispatchee> _dispatchees = new List<Dispatchee>();
 
-        private readonly object _lock = new object();
+        private readonly object _instanceLock = new object();
+        private static readonly object _multiThreadLock = new object();
 
         /// <summary>
         /// Constructs a Dispatcher object with the specified Dispatchee.
@@ -35,7 +36,8 @@ namespace DispatchR
         /// <param name="dispatchee">The Dispatchee collection to be added and processed by the Dispatcher.</param>
         public Dispatcher(IEnumerable<Dispatchee> dispatchees)
         {
-            _dispatchees = new List<Dispatchee>(dispatchees.SortByOrderAttr());
+            _dispatchees = new List<Dispatchee>(dispatchees);
+            _dispatchees.Sort();
         }
 
         /// <summary>
@@ -46,7 +48,7 @@ namespace DispatchR
         public void Add<T>(T dispatchee)
             where T : Dispatchee
         {
-            lock (_lock)
+            lock (_instanceLock)
             {
                 if (_dispatchees.Contains(dispatchee)) throw new InvalidOperationException("Duplicate dispatchee found.");
 
@@ -54,7 +56,7 @@ namespace DispatchR
 
                 if (typeof(T).IsDefined(typeof(DispatchOrderAttribute), true))
                 {
-                    _dispatchees = new List<Dispatchee>(_dispatchees.SortByOrderAttr());
+                    _dispatchees.Sort();
                 }
             }
         }
@@ -65,15 +67,20 @@ namespace DispatchR
         /// <param name="dispatchee">The Dispatchee to be removed.</param>
         public void Remove(Dispatchee dispatchee)
         {
-            lock (_lock)
+            lock (_instanceLock)
             {
                 _dispatchees?.Remove(dispatchee);
             }
         }
 
+        /// <summary>
+        /// Executes the dispatchees with order priority.
+        /// </summary>
+        /// <param name="token">The CancellationToken</param>
+        /// <returns>A collection of tasks</returns>
         public Task[] DispatchAsync(CancellationToken token = default)
         {
-            return _dispatchees.SortByOrderAttr()
+            return _dispatchees
                         .Select(x => x.ExecuteAsync(token))
                             .ToArray();
         }
@@ -94,20 +101,22 @@ namespace DispatchR
             }, token);
         }
 
-        protected void Dispatch(List<Dispatchee> dispatchees, CancellationToken token = default)
+        protected static void Dispatch(List<Dispatchee> dispatchees, CancellationToken token = default)
         {
-            lock (_lock)
+            Dispatchee[] array;
+            lock (_multiThreadLock)
             {
-                for (int i = 0; i < dispatchees.Count; i++)
-                {
-                    Dispatchee dispatchee = dispatchees[i];
+                array = dispatchees.ToArray();
+            }
+            for (int i = 0; i < array.Length; i++)
+            {
+                Dispatchee dispatchee = array[i];
 
-                    if (dispatchee == null) continue;
+                if (dispatchee == null) continue;
 
-                    if (!dispatchee.ShouldExecute()) continue;
+                if (!dispatchee.ShouldExecute()) continue;
 
-                    _ = dispatchee.InvokeAsync(token);
-                }
+                _ = dispatchee.InvokeAsync(token);
             }
         }
     }

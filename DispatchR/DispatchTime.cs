@@ -112,9 +112,9 @@ namespace DispatchR
             get => _day;
             private set
             {
-                if (value < 1) throw new ArgumentOutOfRangeException("A day cannot be less than 1");
+                if (value < 1) throw new ArgumentOutOfRangeException(nameof(Day), "A day cannot be less than 1");
 
-                if (value > 31) throw new ArgumentOutOfRangeException("A day cannot be greater than 31");
+                if (value > 31) throw new ArgumentOutOfRangeException(nameof(Day), "A day cannot be greater than 31");
 
                 _day = value;
             }
@@ -130,9 +130,9 @@ namespace DispatchR
             get => _hour;
             private set
             {
-                if (value < 0) throw new ArgumentOutOfRangeException("A hour cannot be less than 0");
+                if (value < 0) throw new ArgumentOutOfRangeException(nameof(Hour), "A hour cannot be less than 0");
 
-                if (value > 23) throw new ArgumentOutOfRangeException("A hour cannot be greater than 23");
+                if (value > 23) throw new ArgumentOutOfRangeException(nameof(Hour), "A hour cannot be greater than 23");
 
                 _hour = value;
             }
@@ -148,9 +148,9 @@ namespace DispatchR
             get => _minute;
             private set
             {
-                if (value < 0) throw new ArgumentOutOfRangeException("A minute cannot be less than 0");
+                if (value < 0) throw new ArgumentOutOfRangeException(nameof(Minute), "A minute cannot be less than 0");
 
-                if (value > 59) throw new ArgumentOutOfRangeException("A minute cannot be greater than 59");
+                if (value > 59) throw new ArgumentOutOfRangeException(nameof(Minute), "A minute cannot be greater than 59");
 
                 _minute = value;
             }
