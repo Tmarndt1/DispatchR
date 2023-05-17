@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,7 +20,6 @@ namespace DispatchR
         private List<Dispatchee> _dispatchees = new List<Dispatchee>();
 
         private readonly object _instanceLock = new object();
-        private static readonly object _multiThreadLock = new object();
 
         /// <summary>
         /// Constructs a Dispatcher object with the specified Dispatchee.
@@ -103,21 +103,18 @@ namespace DispatchR
 
         protected static void Dispatch(List<Dispatchee> dispatchees, CancellationToken token = default)
         {
-            Dispatchee[] array;
-            lock (_multiThreadLock)
+            lock (dispatchees)
             {
-                array = dispatchees.ToArray();
+                foreach (Dispatchee dispatchee in dispatchees)
+                {
+                    if (dispatchee == null) continue;
+
+                    if (!dispatchee.ShouldExecute()) continue;
+
+                    _ = dispatchee.InvokeAsync(token);
+                }
             }
-            for (int i = 0; i < array.Length; i++)
-            {
-                Dispatchee dispatchee = array[i];
-
-                if (dispatchee == null) continue;
-
-                if (!dispatchee.ShouldExecute()) continue;
-
-                _ = dispatchee.InvokeAsync(token);
-            }
+            
         }
     }
 }
