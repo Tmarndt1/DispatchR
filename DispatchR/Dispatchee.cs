@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,7 +13,7 @@ namespace DispatchR
     /// The class is intended to be subclassed to define specific business logic, 
     /// and is designed to be used in conjunction with a task scheduler or similar mechanism for executing scheduled tasks.
     /// </summary>
-    public abstract class Dispatchee
+    public abstract class Dispatchee : IComparable<Dispatchee>
     {
         /// <summary>
         /// The DispatchFrequency which designates when the Dispatchee should be executed.
@@ -115,6 +116,24 @@ namespace DispatchR
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Compares one instance to another
+        /// </summary>
+        /// <param name="other">The other dispatchee</param>
+        /// <returns>-1 if this comes before other, 1 if this comes after other, 0 otherwise</returns>
+        public int CompareTo(Dispatchee? other)
+        {
+            if (other == null) { return -1; }
+            if (Object.ReferenceEquals(other, this)) { return 0; }
+            var otherAttr = this.GetType().GetCustomAttribute<DispatchOrderAttribute>(true);
+            var attr = this.GetType().GetCustomAttribute<DispatchOrderAttribute>(true);
+            if (attr == null) { return otherAttr == null ? 0 : 1; }
+            if (otherAttr == null) { return -1; }
+            if (attr.Order < otherAttr.Order) { return -1; }
+            if (attr.Order > otherAttr.Order) { return 1; }
+            return 0;
         }
     }
 }
