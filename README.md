@@ -16,7 +16,7 @@ Dispatcher dispatcher = new Dispatcher(new Dispatchee2((token) =>
     return MethodAsync(token); // Make some asynchronous call.
 }, DispatchTime.AtMinute(1))); // Will execute at the first minute of every hour.
 
-dispatcher.RunAsync(token); // Run the dispatcher until the CancellationTokenSource is cancelled.
+dispatcher.RunAsync(token); // Run the dispatcher until the CancellationTokenSource is canceled.
 
 ```
 
@@ -29,7 +29,7 @@ Dispatcher dispatcher = new Dispatcher(new Dispatchee2((token) =>
     return MethodAsync(token); // Make some asynchronous call.
 }, DispatchTime.AtFrequency(TimeSpan.FromSeconds(10)))); // Will execute every 10 seconds.
 
-dispatcher.RunAsync(token); // Run the dispatcher until the CancellationTokenSource is cancelled.
+dispatcher.RunAsync(token); // Run the dispatcher until the CancellationTokenSource is canceled.
 
 ```
 
@@ -49,7 +49,7 @@ Dispatcher dispatcher = new Dispatcher(new Dispatchee[]
     }, DispatchTime.AtFrequency(TimeSpan.FromSeconds(10))) // Will execute every 10 seconds.
 });
 
-dispatcher.RunAsync(token); // Run the dispatcher until the CancellationTokenSource is cancelled.
+dispatcher.RunAsync(token); // Run the dispatcher until the CancellationTokenSource is canceled.
 
 ```
 
